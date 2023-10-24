@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--topic-->
+    <div class="topic-foodbooked">
+        <h1>FoodBooked</h1>
+    </div>
+
+    <!--loginblock-->
+    <div class="register">
+        <!--button-->
+        <ul class="nav-tabs">
+            <li class="nav-items">
+                <a class="nav-links" href="#">Log in</a>
+            </li>
+            <li class="nav-items">
+                <a class="nav-links" href="#">Sign up</a>
+            </li>
+        </ul>
+        <!--input-->
+        <form id="userform">
+            <div class="input-user">
+                <label for="exampleInputUsername">Username</label>
+                <input type="text" name="Username">
+            </div>
+            <div class="input-email">
+                <label for="exampleInputEmail">Email address</label>
+                <input type="email" name ="Email" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="input-password">
+                <label for="exampleInputPassword">Password</label>
+                <input type="password" name="Password">
+            </div>
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#userform").submit(function(event) {
+                event.preventDefault();
+                
+                var userData = {
+                    "Username": $("input[name='Username']").val(),
+                    "Email": $("input[name='Email']").val(),
+                    "Password": $("input[name='Password']").val()
+                };
+                // ตรวจสอบข้อมูล
+                if (!userData.Username || !userData.Email || !userData.Password) {
+                    // แจ้งเตือนผู้ใช้ถ้าข้อมูลไม่ถูกต้อง
+                    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                } else {
+                    // ส่งข้อมูลถ้าข้อมูลถูกต้อง
+                    $("#error-message").text(""); // ลบข้อความเตือนเก่า (ถ้ามี)
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/user",
+                        data: JSON.stringify(userData),
+                        contentType: "application/json",
+                        success: function(response) {
+                            alert("บันทึกข้อมูลสำเร็จ");
+                        },
+                        error: function(error) {
+                            console.error("เกิดข้อผิดพลาด: " + JSON.stringify(error));
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
